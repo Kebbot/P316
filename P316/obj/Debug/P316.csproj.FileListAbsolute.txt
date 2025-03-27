@@ -5,3 +5,14 @@ C:\Users\Admin\source\repos\P316\P316\obj\Debug\P316.csproj.AssemblyReference.ca
 C:\Users\Admin\source\repos\P316\P316\obj\Debug\P316.csproj.CoreCompileInputs.cache
 C:\Users\Admin\source\repos\P316\P316\obj\Debug\P316.exe
 C:\Users\Admin\source\repos\P316\P316\obj\Debug\P316.pdb
+C:\Users\Admin\Documents\GitHub\P316\P316\bin\Debug\P316.exe.config
+C:\Users\Admin\Documents\GitHub\P316\P316\bin\Debug\P316.exe
+C:\Users\Admin\Documents\GitHub\P316\P316\bin\Debug\P316.pdb
+C:\Users\Admin\Documents\GitHub\P316\P316\obj\Debug\P316.csproj.AssemblyReference.cache
+C:\Users\Admin\Documents\GitHub\P316\P316\obj\Debug\P316.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Documents\GitHub\P316\P316\obj\Debug\P316.exe
+C:\Users\Admin\Documents\GitHub\P316\P316\obj\Debug\P316.pdb
+C:\Users\Admin\Documents\GitHub\P316\P316\bin\Debug\P316.exe.manifest
+C:\Users\Admin\Documents\GitHub\P316\P316\bin\Debug\P316.application
+C:\Users\Admin\Documents\GitHub\P316\P316\obj\Debug\P316.exe.manifest
+C:\Users\Admin\Documents\GitHub\P316\P316\obj\Debug\P316.application

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,78 +11,151 @@ namespace P316
 {
     internal class Program
     {
-        struct Dimensions
+        public class Human
         {
-            private double Length;
-            private double Width;
-            public List<string> strings;
-
-            public Dimensions(double length, double width)
+            //int _Id;
+            string _firstName;
+            string _lastName;
+            DateTime _birthDate;
+            //protected string _middleName;
+            public Human() { }
+            public Human(string fName, string lName)
             {
-                strings = new List<string>();
-                Length = length;
-                Width = width;
+                _firstName = fName;
+                _lastName = lName;
             }
-            public void Print()
+            public Human(string fName, string lName, DateTime date)
             {
-                Console.WriteLine($"Длинна: {Length}, ширина: {Width}.");
+                _firstName = fName;
+                _lastName = lName;
+                _birthDate = date;
+            }
+            public virtual void Print()
+            {
+                Console.WriteLine($"Фамилия: {_lastName}\n" +
+                    $"Имя: {_firstName}\n" +
+                    $"Дата рождения: {_birthDate.ToShortDateString()}");
             }
         }
 
-        class MyClass
+        public class Employee : Human
         {
-            public readonly int var = 10;
-            public readonly int[] myArr = {1,2,3 };
+            double _salary;
+            //new string _middleName; // сделали сокрытие поля _middleName
+            public Employee(string fName, string lName, double salary) 
+                : base(fName, lName) 
+            {
+                _salary = salary;
+            }
+            public Employee(string fName, string lName) : base(fName, lName) { }
+            public Employee(string fName, string lName, DateTime date, double salary)
+                : base(fName,lName, date)
+            {
+                _salary=salary;
+            }
+            public override void Print()
+            {
+                base.Print();
+                Console.WriteLine($"Заработная плата: {_salary}$");
+            }
         }
 
-        private static void MyFunction(ref int i, ref int[] myArr)
-        {
-            Console.WriteLine("Внутри функции MyFunction до изменения i = " + i);
-            Console.Write("myArr { ");
-            foreach (int val in myArr)
-                Console.Write(val + " ");
-            Console.WriteLine(" }");
+        public sealed class Tutor : Human { }
 
-            i = 100;
-            myArr = new int[] {3,2,1};
-            Console.WriteLine("Внутри функции MyFunction после изменения i = " + i);
-            Console.Write("myArr { ");
-            foreach (int val in myArr)
-                Console.Write(val + " ");
-            Console.WriteLine(" }");
+        class Manager : Employee
+        {
+            string _fieldActivity;
+            public Manager(
+                string fName, string lName, DateTime date, double salary, string activity)
+                : base(fName,lName,date,salary)
+            {
+                _fieldActivity = activity;
+            }
+            public override void Print()
+            {
+                base.Print();
+                Console.WriteLine($"Менеджер. Сфера деятельности: {_fieldActivity}");
+            }
+        }
+        class Scientist : Employee
+        {
+            string _scientificDirection;
+            public Scientist(
+                string fName, string lName, DateTime date, double salary, string direction)
+                : base(fName,lName,date,salary)
+            {
+                _scientificDirection = direction;
+            }
+            public override void Print()
+            {
+                base.Print();
+                Console.WriteLine($"Ученый. Научное направлени: {_scientificDirection}");
+            }
+        }
+        class Specialist : Employee
+        {
+            string _qualification;
+            public Specialist(
+                string fName, string lName, DateTime date, double salary, string qualification)
+                : base(fName,lName,date,salary)
+            {
+                _qualification = qualification;
+            }
+         
+            public override void Print()
+            {
+                base.Print();
+                Console.WriteLine($"Специалист. Квалификация: {_qualification}");
+            }
         }
 
         static void Main(string[] args)
         {
-            //int i = 10;
-            //int[] myArr = { 1, 2, 3 };
-            //Console.WriteLine("Внутри метода Main до передачи в метод" +
-            //    " MyFunction i = " + i);
-            //Console.Write("myArr { ");
-            //foreach (int val in myArr)
-            //    Console.Write(val + " ");
-            //Console.WriteLine(" }");
+            /*Employee manager =
+                new Manager("Tim", "Doe", new DateTime(1995, 7, 23), 3500, "Продукты питания");
 
-            //MyFunction(ref i, ref myArr);
+            Employee[] employees = {
+                manager,
+                new Scientist("Jim","Beam",
+                new DateTime(1956,3,15),4253,"История"),
+                new Specialist("Jack", "Smith",
+                new DateTime (1996,11,5), 2587.43,"Физика")
+            };
+            foreach (Employee item in employees)
+            {
+                item.Print();
+                try
+                {
+                    ((Specialist)item).ShowSpecialist(); //способ 1
+                    Console.WriteLine();
+                }
+                catch {}
 
-            //Console.WriteLine("Внутри метода Main после передачи в метод" +
-            //   " MyFunction i = " + i);
-            //Console.Write("myArr { ");
-            //foreach (int val in myArr)
-            //    Console.Write(val + " ");
-            //Console.WriteLine(" }");
+                Scientist scientist = item as Scientist; // способ 2
+                if(scientist != null)
+                {
+                    scientist.ShowScientist();
+                    Console.WriteLine();
+                }
 
-            int i;
-            GetDigit(out i);
-            Console.WriteLine($"i = {i}");
+                if (item is Manager)
+                {
+                    (item as Manager).ShowManager(); // способ 3
+                    Console.WriteLine();
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine();*/
+
+            Human employee = 
+                new Manager("Борис", "Бритва", DateTime.Now, 3587.44, "Продукты питания");
+            employee.Print();
+
 
         }
 
-        private static void GetDigit(out int digit)
-        {
-            digit = new Random().Next(10);
-        }
-       
     }
 }
 
+//Полиморфизм C# 
+//абстрактный класс

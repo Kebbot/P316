@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace P316
 {
-    public class Student
+    partial class Student
     {
-        public int _studentId;
+        public int _studentId { get; set; }
+        public int _studentId2 { get; set; }
         public string _firstName="Tod";
         public string _lastName = "Govard";
+        
         public void Print()
         {
             Console.WriteLine($"Студент: {_firstName} {_lastName}");
