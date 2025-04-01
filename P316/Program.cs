@@ -11,7 +11,7 @@ namespace P316
 {
     internal class Program
     {
-        public class Human
+        public abstract class Human
         {
             //int _Id;
             string _firstName;
@@ -36,6 +36,8 @@ namespace P316
                     $"Имя: {_firstName}\n" +
                     $"Дата рождения: {_birthDate.ToShortDateString()}");
             }
+            public abstract void Think();
+           
         }
 
         public class Employee : Human
@@ -58,100 +60,92 @@ namespace P316
                 base.Print();
                 Console.WriteLine($"Заработная плата: {_salary}$");
             }
+            public override void Think() { }
+            
+        }
+    
+        abstract  class Learner : Human
+        {
+            string _institution;
+            public Learner(string fName, string lName, DateTime date,
+                string institution) : base(fName, lName, date)
+            {
+                _institution = institution;
+            }
+            public abstract void Study();
+            public override void Print()
+            {
+                base.Print();
+                Console.WriteLine($"Учебное заведение: {_institution}");
+            }
         }
 
-        public sealed class Tutor : Human { }
+        class Student : Learner
+        {
+            string _groupName;
+            public Student(string fName, string lName,
+                DateTime date, string institution, string groupName) :
+                base(fName,lName,date,institution)
+            {
+                _groupName = groupName;
+            }
+            public override void Think()
+            {
+                Console.WriteLine("Я думаю как студент.");
+            }
+            public override void Study()
+            {
+                Console.WriteLine("Я изучаю предметы в интституте");
+            }
+            public override void Print()
+            {
+                base.Print();
+                Console.WriteLine($"Учусь в {_groupName} группе.");
+            }
+        }
 
-        class Manager : Employee
+        class ShoolChild : Learner
         {
-            string _fieldActivity;
-            public Manager(
-                string fName, string lName, DateTime date, double salary, string activity)
-                : base(fName,lName,date,salary)
+            string _className;
+            public ShoolChild(string fName, string lName,
+                DateTime date, string institution,string className) :
+                base(fName, lName, date, institution)
             {
-                _fieldActivity = activity;
+                _className = className;
+            }
+            public override void Think()
+            {
+                Console.WriteLine("Я думаю как школьник.");
+            }
+            public override void Study()
+            {
+                Console.WriteLine("Я изучаю предметы в школе.");
             }
             public override void Print()
             {
                 base.Print();
-                Console.WriteLine($"Менеджер. Сфера деятельности: {_fieldActivity}");
+                Console.WriteLine($"Учусь в {_className} классе.");
             }
         }
-        class Scientist : Employee
-        {
-            string _scientificDirection;
-            public Scientist(
-                string fName, string lName, DateTime date, double salary, string direction)
-                : base(fName,lName,date,salary)
-            {
-                _scientificDirection = direction;
-            }
-            public override void Print()
-            {
-                base.Print();
-                Console.WriteLine($"Ученый. Научное направлени: {_scientificDirection}");
-            }
-        }
-        class Specialist : Employee
-        {
-            string _qualification;
-            public Specialist(
-                string fName, string lName, DateTime date, double salary, string qualification)
-                : base(fName,lName,date,salary)
-            {
-                _qualification = qualification;
-            }
-         
-            public override void Print()
-            {
-                base.Print();
-                Console.WriteLine($"Специалист. Квалификация: {_qualification}");
-            }
-        }
+
 
         static void Main(string[] args)
         {
-            /*Employee manager =
-                new Manager("Tim", "Doe", new DateTime(1995, 7, 23), 3500, "Продукты питания");
-
-            Employee[] employees = {
-                manager,
-                new Scientist("Jim","Beam",
-                new DateTime(1956,3,15),4253,"История"),
-                new Specialist("Jack", "Smith",
-                new DateTime (1996,11,5), 2587.43,"Физика")
+            Learner[] learners =
+            {
+                new Student("John", "Doe",
+                new DateTime(1999,6,12), "IT Step", "P316"),
+                new ShoolChild("Jack", "Smith",
+                new DateTime(2008,4,18), "Shool#154", "1-A")
             };
-            foreach (Employee item in employees)
+            foreach (Learner item in learners)
             {
                 item.Print();
-                try
-                {
-                    ((Specialist)item).ShowSpecialist(); //способ 1
-                    Console.WriteLine();
-                }
-                catch {}
-
-                Scientist scientist = item as Scientist; // способ 2
-                if(scientist != null)
-                {
-                    scientist.ShowScientist();
-                    Console.WriteLine();
-                }
-
-                if (item is Manager)
-                {
-                    (item as Manager).ShowManager(); // способ 3
-                    Console.WriteLine();
-                }
+                item.Think();
+                item.Study();
+                Console.WriteLine();
             }
-            Console.WriteLine();
-            Console.WriteLine();*/
-
-            Human employee = 
-                new Manager("Борис", "Бритва", DateTime.Now, 3587.44, "Продукты питания");
-            employee.Print();
-
-
+           
         }
 
     }
