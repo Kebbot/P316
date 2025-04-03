@@ -11,145 +11,173 @@ namespace P316
 {
     internal class Program
     {
-        public abstract class Human
+        
+        public class Point
         {
-            //int _Id;
-            string _firstName;
-            string _lastName;
-            DateTime _birthDate;
-            //protected string _middleName;
-            public Human() { }
-            public Human(string fName, string lName)
+            public int X {  get; set; }
+            public int Y {  get; set; }
+            //Перегрузка инкремента (++)
+            public static Point operator ++(Point s)
             {
-                _firstName = fName;
-                _lastName = lName;
+                s.X++;
+                s.Y++;
+                return s;
             }
-            public Human(string fName, string lName, DateTime date)
+            //Перегрузка декремента (--)
+            public static Point operator --(Point s)
             {
-                _firstName = fName;
-                _lastName = lName;
-                _birthDate = date;
+                s.X--;
+                s.Y--;
+                return s;
             }
-            public virtual void Print()
+            //Перегрузка оператора (- унарный) 
+            public static Point operator -(Point s)
             {
-                Console.WriteLine($"Фамилия: {_lastName}\n" +
-                    $"Имя: {_firstName}\n" +
-                    $"Дата рождения: {_birthDate.ToShortDateString()}");
+                return new Point { X = -s.X, Y = -s.Y };
             }
-            public abstract void Think();
-           
-        }
-
-        public class Employee : Human
-        {
-            double _salary;
-            //new string _middleName; // сделали сокрытие поля _middleName
-            public Employee(string fName, string lName, double salary) 
-                : base(fName, lName) 
+            public override string ToString()
             {
-                _salary = salary;
+                return $"Point: X = {X}, Y = {Y}";
             }
-            public Employee(string fName, string lName) : base(fName, lName) { }
-            public Employee(string fName, string lName, DateTime date, double salary)
-                : base(fName,lName, date)
+            public override bool Equals(object obj)
             {
-                _salary=salary;
+                return this.ToString() == obj.ToString();
             }
-            public override void Print()
+            public override int GetHashCode()
             {
-                base.Print();
-                Console.WriteLine($"Заработная плата: {_salary}$");
+                return this.ToString().GetHashCode();
             }
-            public override void Think() { }
-            
-        }
-    
-        abstract  class Learner : Human
-        {
-            string _institution;
-            public Learner(string fName, string lName, DateTime date,
-                string institution) : base(fName, lName, date)
+            public static bool operator ==(Point p1,Point p2)
             {
-                _institution = institution;
+                return p1.Equals(p2);
             }
-            public abstract void Study();
-            public override void Print()
+            public static bool operator !=(Point p1, Point p2)
             {
-                base.Print();
-                Console.WriteLine($"Учебное заведение: {_institution}");
+                return !(p1 == p2);
+            }
+            public static bool operator >(Point p1,Point p2)
+            {
+                return Math.Sqrt(p1.X * p1.X + p1.Y * p1.Y) >
+                    Math.Sqrt(p2.X * p2.X + p2.Y * p2.Y);
+            }
+            public static bool operator <(Point p1, Point p2)
+            {
+                return Math.Sqrt(p1.X * p1.X + p1.Y * p1.Y) <
+                    Math.Sqrt(p2.X * p2.X + p2.Y * p2.Y);
+            }
+            public static bool operator true(Point p)
+            {
+                return p.X != 0 || p.Y != 0 ? true : false;
+            }
+            public static bool operator false(Point p)
+            {
+                return p.X == 0 && p.Y == 0 ? true : false;
             }
         }
-
-        class Student : Learner
+        public class Vector
         {
-            string _groupName;
-            public Student(string fName, string lName,
-                DateTime date, string institution, string groupName) :
-                base(fName,lName,date,institution)
+            public int X { get; set; }
+            public int Y { get; set; }
+            public Vector() { }
+            public Vector(Point begin, Point end)
             {
-                _groupName = groupName;
+                X = end.X - begin.X;
+                Y = end.Y - begin.Y;
             }
-            public override void Think()
+            public static Vector operator +(Vector v1, Vector v2)
             {
-                Console.WriteLine("Я думаю как студент.");
+                return new Vector { X = v1.X + v2.X, Y = v1.Y + v2.Y };
             }
-            public override void Study()
+            public static Vector operator -(Vector v1, Vector v2)
             {
-                Console.WriteLine("Я изучаю предметы в интституте");
+                return new Vector { X = v1.X - v2.X, Y = v1.Y - v2.Y };
             }
-            public override void Print()
+            public static Vector operator *(Vector v, int n)
             {
-                base.Print();
-                Console.WriteLine($"Учусь в {_groupName} группе.");
+                v.X *= n;
+                v.Y *= n;
+                return v;
             }
-        }
-
-        class ShoolChild : Learner
-        {
-            string _className;
-            public ShoolChild(string fName, string lName,
-                DateTime date, string institution,string className) :
-                base(fName, lName, date, institution)
+            public override string ToString()
             {
-                _className = className;
-            }
-            public override void Think()
-            {
-                Console.WriteLine("Я думаю как школьник.");
-            }
-            public override void Study()
-            {
-                Console.WriteLine("Я изучаю предметы в школе.");
-            }
-            public override void Print()
-            {
-                base.Print();
-                Console.WriteLine($"Учусь в {_className} классе.");
+                return $"Vector: X = {X}, Y = {Y}";
             }
         }
 
-
+        public class CPoint
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
+        struct SPoint
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
         static void Main(string[] args)
         {
-            Learner[] learners =
+
+            Point point = new Point
             {
-                new Student("John", "Doe",
-                new DateTime(1999,6,12), "IT Step", "P316"),
-                new ShoolChild("Jack", "Smith",
-                new DateTime(2008,4,18), "Shool#154", "1-A")
+                X = int.Parse(Console.ReadLine()),
+                Y = int.Parse(Console.ReadLine())
             };
-            foreach (Learner item in learners)
-            {
-                item.Print();
-                item.Think();
-                item.Study();
-                Console.WriteLine();
-            }
-           
+            if (point)
+                Console.WriteLine("Точка не в начале координат");
+            else
+                Console.WriteLine("Точка в начале координат");
+
+            /*Point point1 = new Point {X = 20,Y=20 };
+            Point point2 = new Point { X = 20,Y = 20};
+
+            Console.WriteLine($"point1: {point1}");
+            Console.WriteLine($"point2: {point2}\n");
+            Console.WriteLine($"point1 == point2: {point1 == point2}");
+            Console.WriteLine($"point1 != point2: {point1 != point2}");
+            Console.WriteLine($"point1 > point2: {point1 > point2}");
+            Console.WriteLine($"point1 < point2: {point1 < point2}");*/
+                /*
+                //Ссылочный тип
+                CPoint cp = new CPoint { X = 10, Y = 10 };
+                CPoint cp1 = new CPoint { X = 10,Y = 10 };
+                CPoint cp2 = cp1;
+
+                Console.WriteLine($"ReferenceEquals(cp,cp1) = " +
+                    $"{ReferenceEquals(cp, cp1)}");
+
+                Console.WriteLine($"ReferenceEquals(cp1,cp2) = " +
+                    $"{ReferenceEquals(cp1, cp2)}");
+
+                Console.WriteLine($"Equals(cp,cp1) = " +
+                    $"{Equals(cp, cp1)}");
+
+                //Значимый тип
+                SPoint sp = new SPoint { X = 10, Y = 10 };
+                SPoint sp1 = new SPoint { X = 10,Y= 10 };
+
+                Console.WriteLine($"Equals(sp,sp1) = " +
+                    $"{Equals(sp, sp1)}");*/
+
+                /*Point p1 = new Point {X=2,Y=3 };
+                Point p2 = new Point { X = 3, Y = 1 };
+                Vector v1 = new Vector(p1, p2);
+                Vector v2 = new Vector {X = 2,Y=3 };
+
+                Console.WriteLine($"\tВектора\n{v1}\n{v2}");
+                Console.WriteLine($"\n\tСложение векторов\n{v1 + v2}\n");
+                Console.WriteLine($"\n\tРазность векторов\n{v1 - v2}\n");
+                Console.WriteLine("Введите целое число:");
+                int n = int.Parse( Console.ReadLine() );
+                v1 *= n;
+                Console.WriteLine($"\n\tУмножение вектора на число {n}\n {v1}\n");*/
         }
 
     }
 }
 
-//Полиморфизм C# 
-//абстрактный класс
+//Перегрузка Логических операторов = след.тема
+
+/*
+ * public static тип_возврата operator символ_операции(параметры)
+ * { тело перегрузки }
+ */
