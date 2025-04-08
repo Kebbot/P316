@@ -114,70 +114,194 @@ namespace P316
             public int X { get; set; }
             public int Y { get; set; }
         }
-        static void Main(string[] args)
+
+        public abstract class Figure
+        {
+            public abstract void Draw();
+        }
+        public abstract class Quadrangle : Figure
         {
 
-            Point point = new Point
-            {
-                X = int.Parse(Console.ReadLine()),
-                Y = int.Parse(Console.ReadLine())
-            };
-            if (point)
-                Console.WriteLine("Точка не в начале координат");
-            else
-                Console.WriteLine("Точка в начале координат");
-
-            /*Point point1 = new Point {X = 20,Y=20 };
-            Point point2 = new Point { X = 20,Y = 20};
-
-            Console.WriteLine($"point1: {point1}");
-            Console.WriteLine($"point2: {point2}\n");
-            Console.WriteLine($"point1 == point2: {point1 == point2}");
-            Console.WriteLine($"point1 != point2: {point1 != point2}");
-            Console.WriteLine($"point1 > point2: {point1 > point2}");
-            Console.WriteLine($"point1 < point2: {point1 < point2}");*/
-                /*
-                //Ссылочный тип
-                CPoint cp = new CPoint { X = 10, Y = 10 };
-                CPoint cp1 = new CPoint { X = 10,Y = 10 };
-                CPoint cp2 = cp1;
-
-                Console.WriteLine($"ReferenceEquals(cp,cp1) = " +
-                    $"{ReferenceEquals(cp, cp1)}");
-
-                Console.WriteLine($"ReferenceEquals(cp1,cp2) = " +
-                    $"{ReferenceEquals(cp1, cp2)}");
-
-                Console.WriteLine($"Equals(cp,cp1) = " +
-                    $"{Equals(cp, cp1)}");
-
-                //Значимый тип
-                SPoint sp = new SPoint { X = 10, Y = 10 };
-                SPoint sp1 = new SPoint { X = 10,Y= 10 };
-
-                Console.WriteLine($"Equals(sp,sp1) = " +
-                    $"{Equals(sp, sp1)}");*/
-
-                /*Point p1 = new Point {X=2,Y=3 };
-                Point p2 = new Point { X = 3, Y = 1 };
-                Vector v1 = new Vector(p1, p2);
-                Vector v2 = new Vector {X = 2,Y=3 };
-
-                Console.WriteLine($"\tВектора\n{v1}\n{v2}");
-                Console.WriteLine($"\n\tСложение векторов\n{v1 + v2}\n");
-                Console.WriteLine($"\n\tРазность векторов\n{v1 - v2}\n");
-                Console.WriteLine("Введите целое число:");
-                int n = int.Parse( Console.ReadLine() );
-                v1 *= n;
-                Console.WriteLine($"\n\tУмножение вектора на число {n}\n {v1}\n");*/
         }
 
+        public class Rectangle : Quadrangle
+        {
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public static implicit operator Rectangle(Square s)
+            {
+                return new Rectangle { Width = s.Length * 2, Height = s.Length };
+            }
+            public override void Draw()
+            {
+                for (int i = 0; i < Height; i++)
+                {
+                    for (int j = 0; j < Width; j++)
+                    {
+                        Console.Write("*");
+                    }
+                }
+                Console.WriteLine();
+            }
+            public override string ToString()
+            {
+                return $"Rectangle: Width = {Width}, Height = {Height}";
+            }
+        }
+        public class Square : Quadrangle
+        {
+            public int Length { get; set; }
+            public static explicit operator Square(Rectangle s)
+            {
+                return new Square { Length = s.Height};
+            }
+            //public static implicit operator Square(Rectangle number)
+            //{
+            //    return new Square { Length = number };
+            //}
+
+            public static explicit operator int(Square s)
+            {
+                return s.Length;
+            }
+            public static implicit operator Square(int number)
+            {
+                return new Square { Length = number };
+            }
+            public override void Draw()
+            {
+                for (int i = 0; i < Length; i++)
+                {
+                    for (int j = 0; j < Length; j++)
+                    {
+                        Console.Write("*");
+                    }
+                }
+                Console.WriteLine();
+            }
+            public override string ToString()
+            {
+                return $"Square: Length = {Length}";
+            }
+        }
+
+        public class Shop
+        {
+            public Laptop[] laptops;
+            public Shop(int size)
+            {
+                laptops = new Laptop[size];
+            }
+            public int Length
+            {
+                get { return laptops.Length;}
+            }
+            public Laptop this[int index]
+            {
+                get
+                {
+                    if (index >= 0 && index < laptops.Length)
+                    {
+                        return laptops[index];
+                    }
+                    throw new IndexOutOfRangeException();
+                }
+                set
+                {
+                    laptops[index] = value;
+                }
+            }
+
+        }
+        public class Laptop
+        {
+            public string Vendor {  get; set; }
+            public double Price {  get; set; }
+            public override string ToString()
+            {
+                return $"Vendor: {Vendor}, Price: {Price}";
+            }
+        }
+
+        public class MultArray
+        {
+            private int[,] array;
+            public int Rows { get; private set; }
+            public int Cols {  get; private set; }
+            public MultArray(int rows, int cols)
+            {
+                Rows = rows;
+                Cols = cols;
+                array = new int[rows, cols];
+            }
+            public int this[int r, int c]
+            {
+                get { return array[r, c]; }
+                set { array[r, c] = value; }
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            MultArray[] multArray = new MultArray[2] 
+            { new MultArray(2,3), new MultArray(5,5) };
+            for (int i = 0; i < multArray.Length; i++)
+            {
+                for (int p = 0; p < multArray[i].Rows; p++)
+                {
+                    for (int j = 0; j < multArray[i].Cols; j++)
+                    {
+                        multArray[i][p, j] = p + j;
+                        Console.Write($"{multArray[i][p, j]} ");
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+
+            /*Shop laptops = new Shop(3);
+            laptops[0] = new Laptop { Vendor = "Samsung", Price = 5200 };
+            laptops[1] = new Laptop { Vendor = "Asus", Price = 4200 };
+            laptops[2] = new Laptop { Vendor = "Huawei", Price = 7200 };
+            try
+            {
+                for (int i = 0; i < laptops.Length; i++)
+                {
+                    Console.WriteLine(laptops[i]);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }*/
+            /*Rectangle rectangle = new Rectangle { Width = 14, Height = 7 };
+            Square square = new Square { Length = 7 };
+            Rectangle rectSquare = square;
+
+            Console.WriteLine($"Не явное преобразование квадрата ({square}) к " +
+                $"прямоугольнику.\n{rectSquare}\n");
+            //rectSquare.Draw();
+
+            Square squareRect = (Square)rectangle;
+            Console.WriteLine($"Явное преобразование прямоугольника ({rectangle}) к " +
+                $"квадрату.\n{squareRect}\n");
+            //rectSquare.Draw();
+
+            Console.WriteLine("Введите целое число.");
+            int number = int.Parse(Console.ReadLine());
+            Square squareInt = number;
+            Console.WriteLine($"Явное преобразование целого ({number}) к " +
+                $"квадрату.\n{squareInt}\n");
+
+            number = (int)square;
+            Console.WriteLine($"Явное преобразование квадрата ({square}) к " +
+               $"целому.\n{number}\n");*/
+        }
     }
 }
-
-//Перегрузка Логических операторов = след.тема
-
 /*
- * public static тип_возврата operator символ_операции(параметры)
- * { тело перегрузки }
+ * тип_данных this[тип_аргумента] {get; set;}
  */
+//перегрузка индексаторов = след.тема
+
