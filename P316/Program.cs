@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -11,180 +12,6 @@ namespace P316
 {
     internal class Program
     {
-        
-        public class Point
-        {
-            public int X {  get; set; }
-            public int Y {  get; set; }
-            //Перегрузка инкремента (++)
-            public static Point operator ++(Point s)
-            {
-                s.X++;
-                s.Y++;
-                return s;
-            }
-            //Перегрузка декремента (--)
-            public static Point operator --(Point s)
-            {
-                s.X--;
-                s.Y--;
-                return s;
-            }
-            //Перегрузка оператора (- унарный) 
-            public static Point operator -(Point s)
-            {
-                return new Point { X = -s.X, Y = -s.Y };
-            }
-            public override string ToString()
-            {
-                return $"Point: X = {X}, Y = {Y}";
-            }
-            public override bool Equals(object obj)
-            {
-                return this.ToString() == obj.ToString();
-            }
-            public override int GetHashCode()
-            {
-                return this.ToString().GetHashCode();
-            }
-            public static bool operator ==(Point p1,Point p2)
-            {
-                return p1.Equals(p2);
-            }
-            public static bool operator !=(Point p1, Point p2)
-            {
-                return !(p1 == p2);
-            }
-            public static bool operator >(Point p1,Point p2)
-            {
-                return Math.Sqrt(p1.X * p1.X + p1.Y * p1.Y) >
-                    Math.Sqrt(p2.X * p2.X + p2.Y * p2.Y);
-            }
-            public static bool operator <(Point p1, Point p2)
-            {
-                return Math.Sqrt(p1.X * p1.X + p1.Y * p1.Y) <
-                    Math.Sqrt(p2.X * p2.X + p2.Y * p2.Y);
-            }
-            public static bool operator true(Point p)
-            {
-                return p.X != 0 || p.Y != 0 ? true : false;
-            }
-            public static bool operator false(Point p)
-            {
-                return p.X == 0 && p.Y == 0 ? true : false;
-            }
-        }
-        public class Vector
-        {
-            public int X { get; set; }
-            public int Y { get; set; }
-            public Vector() { }
-            public Vector(Point begin, Point end)
-            {
-                X = end.X - begin.X;
-                Y = end.Y - begin.Y;
-            }
-            public static Vector operator +(Vector v1, Vector v2)
-            {
-                return new Vector { X = v1.X + v2.X, Y = v1.Y + v2.Y };
-            }
-            public static Vector operator -(Vector v1, Vector v2)
-            {
-                return new Vector { X = v1.X - v2.X, Y = v1.Y - v2.Y };
-            }
-            public static Vector operator *(Vector v, int n)
-            {
-                v.X *= n;
-                v.Y *= n;
-                return v;
-            }
-            public override string ToString()
-            {
-                return $"Vector: X = {X}, Y = {Y}";
-            }
-        }
-
-        public class CPoint
-        {
-            public int X { get; set; }
-            public int Y { get; set; }
-        }
-        struct SPoint
-        {
-            public int X { get; set; }
-            public int Y { get; set; }
-        }
-
-        public abstract class Figure
-        {
-            public abstract void Draw();
-        }
-        public abstract class Quadrangle : Figure
-        {
-
-        }
-
-        public class Rectangle : Quadrangle
-        {
-            public int Width { get; set; }
-            public int Height { get; set; }
-            public static implicit operator Rectangle(Square s)
-            {
-                return new Rectangle { Width = s.Length * 2, Height = s.Length };
-            }
-            public override void Draw()
-            {
-                for (int i = 0; i < Height; i++)
-                {
-                    for (int j = 0; j < Width; j++)
-                    {
-                        Console.Write("*");
-                    }
-                }
-                Console.WriteLine();
-            }
-            public override string ToString()
-            {
-                return $"Rectangle: Width = {Width}, Height = {Height}";
-            }
-        }
-        public class Square : Quadrangle
-        {
-            public int Length { get; set; }
-            public static explicit operator Square(Rectangle s)
-            {
-                return new Square { Length = s.Height};
-            }
-            //public static implicit operator Square(Rectangle number)
-            //{
-            //    return new Square { Length = number };
-            //}
-
-            public static explicit operator int(Square s)
-            {
-                return s.Length;
-            }
-            public static implicit operator Square(int number)
-            {
-                return new Square { Length = number };
-            }
-            public override void Draw()
-            {
-                for (int i = 0; i < Length; i++)
-                {
-                    for (int j = 0; j < Length; j++)
-                    {
-                        Console.Write("*");
-                    }
-                }
-                Console.WriteLine();
-            }
-            public override string ToString()
-            {
-                return $"Square: Length = {Length}";
-            }
-        }
-
         public class Shop
         {
             public Laptop[] laptops;
@@ -211,6 +38,56 @@ namespace P316
                     laptops[index] = value;
                 }
             }
+            public Laptop this[string name]
+            {
+                get
+                {
+                    if(Enum.IsDefined(typeof(Vendors), name))
+                    {
+                        return laptops[(int)Enum.Parse(typeof(Vendors), name)];
+                    }
+                    else
+                    {
+                        return new Laptop();
+                    }
+                }
+                set
+                {
+                    if(Enum.IsDefined(typeof(Vendors), name))
+                    {
+                        laptops[(int)Enum.Parse(typeof(Vendors), name)] = value;
+                    }
+                }
+            }
+            public int FindByPrice(double price)
+            {
+                for (int i = 0; i < laptops.Length; i++)
+                {
+                    if (laptops[i].Price == price)
+                    {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+            public Laptop this[double price]
+            {
+                get
+                {
+                    if(FindByPrice(price) >= 0)
+                    {
+                        return this[FindByPrice(price)];
+                    }
+                    throw new Exception("Недопустимая стоимость.");
+                }
+                set
+                {
+                    if(FindByPrice(price) >= 0)
+                    {
+                        this[FindByPrice(price)] = value;
+                    }
+                }
+            }
 
         }
         public class Laptop
@@ -222,86 +99,193 @@ namespace P316
                 return $"Vendor: {Vendor}, Price: {Price}";
             }
         }
+        enum Vendors {Samsung, Asus,Huawei };
 
-        public class MultArray
+    
+        public interface IWorker
         {
-            private int[,] array;
-            public int Rows { get; private set; }
-            public int Cols {  get; private set; }
-            public MultArray(int rows, int cols)
+            event EventHandler WorkEnded;
+            bool IsWorking { get; }
+            string Work();
+        }
+        public interface IManager
+        {
+            List<IWorker> ListOfWorkers { get; set; }
+            void Organize();
+            void MakeBudget();
+            void Control();
+        }
+
+        abstract class Human
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public DateTime BirthDate { get; set; }
+            public override string ToString()
             {
-                Rows = rows;
-                Cols = cols;
-                array = new int[rows, cols];
+                return $"\nФамилия: {LastName} " +
+                    $"Имя: {FirstName} Дата рождения: " +
+                    $"{BirthDate.ToShortDateString()}";
             }
-            public int this[int r, int c]
+        }
+        abstract class Employee : Human
+        {
+            public string Position { get; set; }
+            public double Salary { get; set; }
+            public override string ToString()
             {
-                get { return array[r, c]; }
-                set { array[r, c] = value; }
+                return base.ToString() + $"\nДолжность {Position}" +
+                    $" Заработная плата: {Salary} $";
+            }
+        }
+        class Director : Employee, IManager
+        {
+            public List<IWorker> ListOfWorkers { get; set; }
+            public void Control()
+            {
+                Console.WriteLine("Контролирую работу!");
+            }
+            public void MakeBudget()
+            {
+                Console.WriteLine("Формирую бюджет!");
+            }
+            public void Organize()
+            {
+                Console.WriteLine("Организую работу!");
+            }
+        }
+        class Seller : Employee, IWorker
+        {
+            bool isWorking = true;
+            public bool IsWorking
+            {
+                get
+                {
+                    return isWorking;
+                }
+            }
+            public event EventHandler WorkEnded;
+            public string Work()
+            {
+                return "Продаю товар!";
+            }
+        }
+        class Cashier : Employee, IWorker
+        {
+            public bool isWorking = true;
+            public bool IsWorking
+            {
+                get
+                {
+                    return isWorking;
+                }
+            }
+            public event EventHandler WorkEnded;
+            public string Work()
+            {
+                return "Принимаю оплату за товар!";
+            }
+        }
+        class Storekeeper : Employee, IWorker
+        {
+            public bool isWorking = true;
+            public bool IsWorking
+            {
+                get
+                {
+                    return isWorking;
+                }
+            }
+            public event EventHandler WorkEnded;
+            public string Work()
+            {
+                return "Учитываю товар!";
             }
         }
 
         static void Main(string[] args)
         {
-            MultArray[] multArray = new MultArray[2] 
-            { new MultArray(2,3), new MultArray(5,5) };
-            for (int i = 0; i < multArray.Length; i++)
+            Director director = new Director
             {
-                for (int p = 0; p < multArray[i].Rows; p++)
+                LastName = "Doe",
+                FirstName = "John",
+                BirthDate = new DateTime(1998, 10, 12),
+                Position = "Директор",
+                Salary = 9000
+            };
+            IWorker seller = new Seller
+            {
+                LastName = "Beam",
+                FirstName = "Jim",
+                BirthDate = new DateTime(1956, 10, 12),
+                Position = "Продавец",
+                Salary = 1000
+            };
+            if(seller is Employee)
+                Console.WriteLine($"Заработная плата продавца:" +
+                    $" {(seller as Employee).Salary}");
+
+            director.ListOfWorkers = new List<IWorker>
+            { seller, new Cashier
                 {
-                    for (int j = 0; j < multArray[i].Cols; j++)
-                    {
-                        multArray[i][p, j] = p + j;
-                        Console.Write($"{multArray[i][p, j]} ");
-                    }
-                    Console.WriteLine();
+                    LastName = "Smith",
+                    FirstName = "Nicole",
+                    BirthDate = new DateTime(1956, 05, 23),
+                    Position = "Кассир",
+                    Salary = 2780
+                },
+                new Storekeeper 
+                {
+                    LastName = "Ross",
+                    FirstName = "Bob",
+                    BirthDate = new DateTime(1956, 05, 23),
+                    Position = "Кладовшик",
+                    Salary = 3000
                 }
-                Console.WriteLine();
-                Console.WriteLine();
+            };
+
+            Console.WriteLine(director);
+            if(director is IManager)
+            {
+                director.Control();
+            }
+            foreach (IWorker item in director.ListOfWorkers)
+            {
+                Console.WriteLine(item);
+                if(item.IsWorking)
+                {
+                    Console.WriteLine(item.Work());
+                }
             }
 
             /*Shop laptops = new Shop(3);
-            laptops[0] = new Laptop { Vendor = "Samsung", Price = 5200 };
-            laptops[1] = new Laptop { Vendor = "Asus", Price = 4200 };
-            laptops[2] = new Laptop { Vendor = "Huawei", Price = 7200 };
+            laptops[0] = new Laptop { Vendor = "Samsung", Price = 520 };
+            laptops[1] = new Laptop { Vendor = "Asus", Price = 500 };
+            laptops[2] = new Laptop { Vendor = "Huawei", Price = 200 };
             try
             {
-                for (int i = 0; i < laptops.Length; i++)
+                for (global::System.Int32 i = 0; i < laptops.Length; i++)
                 {
                     Console.WriteLine(laptops[i]);
                 }
+                Console.WriteLine();
+
+                Console.WriteLine($"Производитель Asus: {laptops["Asus"]}.");
+                Console.WriteLine($"Производитель MAC: {laptops["MAC"]}.");
+
+                laptops["MAC"] = new Laptop();
+                Console.WriteLine($"Стоимость 500.0: {laptops[500.0]}.");
+                Console.WriteLine($"Стоимость 100500.0: {laptops[100500.0]}.");
+
+                laptops[100500.0] = new Laptop();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ex.Message);
             }*/
-            /*Rectangle rectangle = new Rectangle { Width = 14, Height = 7 };
-            Square square = new Square { Length = 7 };
-            Rectangle rectSquare = square;
-
-            Console.WriteLine($"Не явное преобразование квадрата ({square}) к " +
-                $"прямоугольнику.\n{rectSquare}\n");
-            //rectSquare.Draw();
-
-            Square squareRect = (Square)rectangle;
-            Console.WriteLine($"Явное преобразование прямоугольника ({rectangle}) к " +
-                $"квадрату.\n{squareRect}\n");
-            //rectSquare.Draw();
-
-            Console.WriteLine("Введите целое число.");
-            int number = int.Parse(Console.ReadLine());
-            Square squareInt = number;
-            Console.WriteLine($"Явное преобразование целого ({number}) к " +
-                $"квадрату.\n{squareInt}\n");
-
-            number = (int)square;
-            Console.WriteLine($"Явное преобразование квадрата ({square}) к " +
-               $"целому.\n{number}\n");*/
         }
     }
 }
-/*
- * тип_данных this[тип_аргумента] {get; set;}
- */
-//перегрузка индексаторов = след.тема
+
+//интерфейсные свойства и индексаторы = след.тема
 
