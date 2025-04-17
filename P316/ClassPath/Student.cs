@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P316
 {
-    internal class Student : IComparable
+    internal class Student : IComparable, ICloneable
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -26,6 +26,16 @@ namespace P316
         {
             return $"Фамилия: {LastName} Имя: {FirstName} " +
                 $"Дата рожения: {BirthDate.ToShortDateString()}";
+        }
+        public object Clone()
+        {
+            Student temp = (Student)this.MemberwiseClone();
+            temp.studentCard = new StudentCard
+            {
+                Series = this.studentCard.Series,
+                Number = this.studentCard.Number
+            };
+            return temp;
         }
     }
 }

@@ -7,14 +7,14 @@
     <framework targetVersion="4.8" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="P316.exe.manifest" size="3613">
+    <dependentAssembly dependencyType="install" codebase="P316.exe.manifest" size="3614">
       <assemblyIdentity name="P316.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Fx1SmkN/CLukigK63C9HiwXeO7qO5X6BeNPp7I1Jk8c=</dsig:DigestValue>
+        <dsig:DigestValue>UW5TMtRNCdH2PNc9sVHTU4PSG2AMZZtB59ohOf818eM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

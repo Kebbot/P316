@@ -71,15 +71,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auditory.cs" />
-    <Compile Include="DateComparer.cs" />
-    <Compile Include="IIndexer.cs" />
-    <Compile Include="IndexerClass.cs" />
-    <Compile Include="IPerson.cs" />
+    <Compile Include="ClassPath\Auditory.cs" />
+    <Compile Include="ClassPath\Child.cs" />
+    <Compile Include="ClassPath\DateComparer.cs" />
+    <Compile Include="ClassPath\MyException.cs" />
+    <Compile Include="ClassPath\MyExceptionBase.cs" />
+    <Compile Include="IPath\IIndexer.cs" />
+    <Compile Include="ClassPath\IndexerClass.cs" />
+    <Compile Include="IPath\IPerson.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Student.cs" />
-    <Compile Include="StudentCard.cs" />
+    <Compile Include="ClassPath\Student.cs" />
+    <Compile Include="ClassPath\StudentCard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

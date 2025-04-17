@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="P316.exe" size="9152">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="P316.exe" size="10688">
       <assemblyIdentity name="P316" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>ucABhzm+dsdWrlB/hoGv1TKCWfn/jNQdYLXRBk9XgyI=</dsig:DigestValue>
+        <dsig:DigestValue>Jriwxv6UexYGTUhzTo423pgG7kmwd4G1ltixytPwChs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

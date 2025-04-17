@@ -10,76 +10,98 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.Server;
+using P316.ClassPath;
 
 namespace P316
 {
     internal class Program
     {
-        /*interface IA
+        static int DivisionNumbers(int n1, int n2)
         {
-            void Show();
-        }
-        interface IB
-        {
-            void Show();
-        }
-        interface IC
-        {
-            void Show();
-        }
-        class InherInterface : IA, IB, IC
-        {
-            void IA.Show()
+            int result = 0;
+            try
             {
-                Console.WriteLine("interface IA");
+                result = n1 / n2;
             }
-            void IB.Show()
+            catch (DivideByZeroException de)
             {
-                Console.WriteLine("interface IB");
+                throw new Exception("Дополнительная информация",de);
             }
-            public void Show()
-            {
-                Console.WriteLine("interface IC");
-            }
-        }*/
-
-
+            return result; 
+        }
         static void Main(string[] args)
         {
-            Auditory auditory = new Auditory();
-            Console.WriteLine("\n\t\t++++++ Список студентов ++++++\n");
-            auditory.Sort();
+
+            Console.WriteLine("введите 2 числа");
+            int num1, num2, result = 0;
+            try
+            {
+                num1 = int.Parse(Console.ReadLine());
+                num2 = int.Parse(Console.ReadLine());
+
+                result = DivisionNumbers(num1, num2);
+                Console.WriteLine($"Результат деления чисел: {result}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                //дополнительная информация
+
+                Console.WriteLine(e.InnerException.Message);
+                //предыдущее исключение
+            }
+
+            /*try
+            {
+                Console.WriteLine("Код исключения"); // 1
+                throw new MyException();// 2
+
+                //Эта строчка никогда не появится
+                Console.WriteLine("Код исключения");
+            }
+            catch (MyException my)
+            {
+                Console.WriteLine($"Ошибка: {my.Message}");// 3
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Ошибка: {e.Message}");// 3
+            }
+            finally
+            {
+                Console.WriteLine("Код блока finally"); // 4
+            }*/
+            
+            /*Auditory auditory = new Auditory();
+            Console.WriteLine("\t\t++++++++ Список Студентов ++++++++\n");
             foreach (Student student in auditory)
             {
                 Console.WriteLine(student);
             }
-
-            /*InherInterface er = new InherInterface();
-            er.Show(); //вызов метода интерфейса IC неявно 
-
-            ((IA)er).Show();//вызов метода интерфейса IA неявно 
-
-            IB iB = new InherInterface();
-            iB.Show(); ////вызов метода интерфейса IB неявно */
-
-            /*IndexerClass indexerClass = new IndexerClass();
-            Console.WriteLine("\t\tВывод значений\n");
-            Console.WriteLine("Использование индексатора" +
-                " с целочисленным параметром: ");
-            for (int i = 0; i < 5; i++)
+            Console.WriteLine("\t\t++++++++ копирование ++++++++\n");
+            Student student1 = new Student
             {
-                Console.WriteLine(indexerClass[i]);
-            }
-            Console.WriteLine("\nИспользование индексатора" +
-                " со строковым параметром: ");
-            string[] ArrNums = { "one", "two", "three", "four", "five" };
-            foreach (var item in ArrNums)
-            {
-                Console.WriteLine(indexerClass[item]);
-            }*/
+                FirstName = "Gleb",
+                LastName = "Ivanov",
+                BirthDate = new DateTime(1999, 12, 31),
+                studentCard = new StudentCard { Number = 784523, Series = "MM" }
+            };
+            Student student2 = (Student)student1.Clone();
+            Console.WriteLine(student1);
+            Console.WriteLine(student2);*/
+
+            /*Child child1 = new Child { Name = "Arthur", Age = 12 };
+            Console.WriteLine("Начальные значения:");
+            Child child2 = (Child)child1.Clone();
+
+            Console.WriteLine($"Ребенок #1: {child1}");
+            Console.WriteLine($"Ребенок #2: {child2}");
+            child2.Age = 14;
+            Console.WriteLine($"Ребенок #1: {child1}");
+            Console.WriteLine($"Ребенок #2: {child2}");*/
         }
     }
 }
 
-// = след.тема
+//checked и unchecked = след.тема
 
