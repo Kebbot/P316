@@ -74,6 +74,9 @@
     <Compile Include="ClassPath\Auditory.cs" />
     <Compile Include="ClassPath\Child.cs" />
     <Compile Include="ClassPath\DateComparer.cs" />
+    <Compile Include="ClassPath\DisponseExample.cs" />
+    <Compile Include="ClassPath\ExampleNameOf.cs" />
+    <Compile Include="ClassPath\FinalizeExample.cs" />
     <Compile Include="ClassPath\MyException.cs" />
     <Compile Include="ClassPath\MyExceptionBase.cs" />
     <Compile Include="IPath\IIndexer.cs" />
