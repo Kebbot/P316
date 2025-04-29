@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace P316.ClassPath
 {
@@ -44,6 +45,10 @@ namespace P316.ClassPath
             //false - указывает на то, что очистку
             //инициировал сборщик мусора
             Cleaning(false); 
+        }
+        public void DoSomething()
+        {
+            Console.WriteLine("Выполнение Определенных операций");
         }
     }
 }
